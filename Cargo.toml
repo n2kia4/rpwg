@@ -1,0 +1,8 @@
+[package]
+name = "rpwg"
+version = "0.1.0"
+authors = ["Natsuki Tanaka <n2kia4@gmail.com>"]
+
+[dependencies]
+clap = "2.19"
+rand = "0.3"
