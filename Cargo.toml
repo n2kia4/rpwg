@@ -2,6 +2,10 @@
 name = "rpwg"
 version = "0.1.0"
 authors = ["Natsuki Tanaka <n2kia4@gmail.com>"]
+description = "Random password generator."
+repository = "https://github.com/n2kia4/rpwg"
+license = "MIT"
+keywords = ["password"]
 
 [dependencies]
 clap = "2.19"
