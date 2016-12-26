@@ -10,6 +10,7 @@ use rand::Rng;
 const NUMBER: &'static [u8] = b"0123456789";
 const UPPERCASE: &'static [u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWERCASE: &'static [u8] = b"abcdefghijklmnopqrstuvwxyz";
+const SYMBOL: &'static [u8] = b"!\"#$%&'()-=^~\\|@`[]{};:+*,./_<>?";
 
 fn main() {
     let matches = App::new("rpwg")
@@ -27,6 +28,9 @@ fn main() {
         .arg(Arg::with_name("A")
              .short("A")
              .help("Don't include capital letters"))
+        .arg(Arg::with_name("S")
+             .short("S")
+             .help("Include special symbols"))
         .get_matches();
 
     let length = value_t!(matches, "length", usize).unwrap_or(8);
@@ -42,6 +46,9 @@ fn main() {
         {}
     } else {
         vec.write(UPPERCASE).unwrap();
+    }
+    if matches.is_present("S") {
+        vec.write(SYMBOL).unwrap();
     }
 
     let mut rng = rand::thread_rng();
