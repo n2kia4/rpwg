@@ -1,6 +1,6 @@
 [package]
 name = "rpwg"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Natsuki Tanaka <n2kia4@gmail.com>"]
 description = "Random password generator."
 repository = "https://github.com/n2kia4/rpwg"
