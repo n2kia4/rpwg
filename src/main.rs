@@ -37,14 +37,10 @@ fn main() {
 
     let mut vec: Vec<u8> = Vec::new();
     vec.write(LOWERCASE).unwrap();
-    if matches.is_present("0") {
-        {}
-    } else {
+    if ! matches.is_present("0") {
         vec.write(NUMBER).unwrap();
     }
-    if matches.is_present("A") {
-        {}
-    } else {
+    if ! matches.is_present("A") {
         vec.write(UPPERCASE).unwrap();
     }
     if matches.is_present("S") {
