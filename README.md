@@ -10,10 +10,10 @@ You can use the `cargo install` command:
 
 or a classic build and run:
 
-```
-git clone https://github.com/n2kia4/rpwg.git
-cd rpwg
-cargo build --release && cargo run --release
+```bash
+$ git clone https://github.com/n2kia4/rpwg.git
+$ cd rpwg
+$ cargo build --release && cargo run --release
 ```
 
 ## Options
@@ -28,6 +28,7 @@ USAGE:
 FLAGS:
     -0               Don't include numbers
     -A               Don't include capital letters
+    -S               Include special symbols
     -h, --help       Prints help information
     -V, --version    Prints version information
 
