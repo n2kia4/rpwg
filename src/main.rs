@@ -14,8 +14,8 @@ const SYMBOL: &'static [u8] = b"!\"#$%&'()-=^~\\|@`[]{};:+*,./_<>?";
 
 fn main() {
     let matches = App::new("rpwg")
-        .version("v0.1.0")
-        .author("Natsuki Tanaka <n2kia4@gmail.com>")
+        .version(crate_version!())
+        .author(crate_authors!())
         .about("Random password generator")
         .arg(Arg::with_name("length")
              .short("l")
