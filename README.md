@@ -33,6 +33,6 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-    -l, --length <length>        Specify the length (default: 8)
-    -q, --quantity <quantity>    Specify the quantity (default: 10)
+    -l, --length <length>        Specify the length [default: 8]
+    -q, --quantity <quantity>    Specify the quantity [default: 10]
 ```
