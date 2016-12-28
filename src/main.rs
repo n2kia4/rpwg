@@ -22,6 +22,11 @@ fn main() {
              .long("length")
              .takes_value(true)
              .help("Specify the length (default: 8)"))
+        .arg(Arg::with_name("quantity")
+             .short("q")
+             .long("quantity")
+             .takes_value(true)
+             .help("Specify the quantity (default: 10)"))
         .arg(Arg::with_name("0")
              .short("0")
              .help("Don't include numbers"))
@@ -34,6 +39,7 @@ fn main() {
         .get_matches();
 
     let length = value_t!(matches, "length", usize).unwrap_or(8);
+    let qty = value_t!(matches, "quantity", usize).unwrap_or(10);
 
     let mut vec: Vec<u8> = Vec::new();
     vec.write(LOWERCASE).unwrap();
@@ -48,7 +54,8 @@ fn main() {
     }
 
     let mut rng = rand::thread_rng();
-    let pw: String = (0..length).map(|_| *rng.choose(&vec).unwrap() as char).collect();
-
-    println!("Generated password: {}", pw);
+    for _ in 0..qty {
+        let pw: String = (0..length).map(|_| *rng.choose(&vec).unwrap() as char).collect();
+        println!("{}", pw);
+    }
 }
