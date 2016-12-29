@@ -1,5 +1,4 @@
 #[macro_use]
-
 extern crate clap;
 extern crate rand;
 
@@ -17,29 +16,15 @@ fn main() {
         .version(crate_version!())
         .author(crate_authors!())
         .about("Random password generator")
-        .arg(Arg::with_name("length")
-             .short("l")
-             .long("length")
-             .takes_value(true)
-             .help("Specify the length (default: 8)"))
-        .arg(Arg::with_name("quantity")
-             .short("q")
-             .long("quantity")
-             .takes_value(true)
-             .help("Specify the quantity (default: 10)"))
-        .arg(Arg::with_name("0")
-             .short("0")
-             .help("Don't include numbers"))
-        .arg(Arg::with_name("A")
-             .short("A")
-             .help("Don't include capital letters"))
-        .arg(Arg::with_name("S")
-             .short("S")
-             .help("Include special symbols"))
+        .arg(Arg::from_usage("-l --length [length] 'Specify the length'").default_value("8"))
+        .arg(Arg::from_usage("-q --quantity [quantity] 'Specify the quantity'").default_value("10"))
+        .arg(Arg::from_usage("-0 'Don't include numbers'"))
+        .arg(Arg::from_usage("-A 'Don't include capital letters'"))
+        .arg(Arg::from_usage("-S 'Include special symbols'"))
         .get_matches();
 
-    let length = value_t!(matches, "length", usize).unwrap_or(8);
-    let qty = value_t!(matches, "quantity", usize).unwrap_or(10);
+    let length = value_t!(matches, "length", usize).unwrap();
+    let qty = value_t!(matches, "quantity", usize).unwrap();
 
     let mut vec: Vec<u8> = Vec::new();
     vec.write(LOWERCASE).unwrap();
