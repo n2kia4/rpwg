@@ -27,20 +27,52 @@ fn main() {
     let qty = value_t!(matches, "quantity", usize).unwrap();
 
     let mut vec: Vec<u8> = Vec::new();
+    let mut n = 1;
     vec.write(LOWERCASE).unwrap();
     if ! matches.is_present("0") {
         vec.write(NUMBER).unwrap();
+        n += 1;
     }
     if ! matches.is_present("A") {
         vec.write(UPPERCASE).unwrap();
+        n += 1;
     }
     if matches.is_present("S") {
         vec.write(SYMBOL).unwrap();
+        n += 1;
     }
 
     let mut rng = rand::thread_rng();
     for _ in 0..qty {
-        let pw: String = (0..length).map(|_| *rng.choose(&vec).unwrap() as char).collect();
+        let mut mtl: Vec<char> = Vec::new();
+        let mtl_lower: Vec<char> = (0..1)
+            .map(|_| *rng.choose(&LOWERCASE).unwrap() as char)
+            .collect();
+        mtl.extend_from_slice(&mtl_lower);
+        if ! matches.is_present("0") {
+            let mtl_num: Vec<char> = (0..1)
+                .map(|_| *rng.choose(&NUMBER).unwrap() as char)
+                .collect();
+            mtl.extend_from_slice(&mtl_num);
+        }
+        if ! matches.is_present("A") {
+            let mtl_upper: Vec<char> = (0..1)
+                .map(|_| *rng.choose(&UPPERCASE).unwrap() as char)
+                .collect();
+            mtl.extend_from_slice(&mtl_upper);
+        }
+        if matches.is_present("S") {
+            let mtl_symbol: Vec<char> = (0..1)
+                .map(|_| *rng.choose(&SYMBOL).unwrap() as char)
+                .collect();
+            mtl.extend_from_slice(&mtl_symbol);
+        }
+        let mtl_rand: Vec<char> = (0..length - n)
+            .map(|_| *rng.choose(&vec).unwrap() as char)
+            .collect();
+        mtl.extend_from_slice(&mtl_rand);
+        rng.shuffle(&mut mtl);
+        let pw: String = mtl.into_iter().collect();
         println!("{}", pw);
     }
 }
