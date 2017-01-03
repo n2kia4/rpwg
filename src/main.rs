@@ -47,29 +47,21 @@ fn main() {
         for _ in 0..qty {
             let mut mtl: Vec<char> = Vec::new();
 
-            let mtl_lower: Vec<char> = (0..1)
-                .map(|_| *rng.choose(&LOWERCASE).unwrap() as char)
-                .collect();
+            let mtl_lower: Vec<char> = each_choose(&LOWERCASE);
             mtl.extend_from_slice(&mtl_lower);
 
             if ! matches.is_present("0") {
-                let mtl_num: Vec<char> = (0..1)
-                    .map(|_| *rng.choose(&NUMBER).unwrap() as char)
-                    .collect();
+                let mtl_num: Vec<char> = each_choose(&NUMBER);
                 mtl.extend_from_slice(&mtl_num);
             }
 
             if ! matches.is_present("A") {
-                let mtl_upper: Vec<char> = (0..1)
-                    .map(|_| *rng.choose(&UPPERCASE).unwrap() as char)
-                    .collect();
+                let mtl_upper: Vec<char> = each_choose(&UPPERCASE);
                 mtl.extend_from_slice(&mtl_upper);
             }
 
             if matches.is_present("S") {
-                let mtl_symbol: Vec<char> = (0..1)
-                    .map(|_| *rng.choose(&SYMBOL).unwrap() as char)
-                    .collect();
+                let mtl_symbol: Vec<char> = each_choose(&SYMBOL);
                 mtl.extend_from_slice(&mtl_symbol);
             }
 
@@ -85,4 +77,9 @@ fn main() {
     } else {
         println!("Please specify length more than {}.", n);
     }
+}
+
+fn each_choose(x: &[u8]) -> Vec<char> {
+    let mut rng = rand::thread_rng();
+    (0..1).map(|_| *rng.choose(x).unwrap() as char).collect::<Vec<char>>()
 }
