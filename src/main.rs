@@ -47,22 +47,18 @@ fn main() {
         for _ in 0..qty {
             let mut mtl: Vec<char> = Vec::new();
 
-            let mtl_lower: Vec<char> = each_choose(&LOWERCASE);
-            mtl.extend_from_slice(&mtl_lower);
+            mtl.extend_from_slice(&each_choose(&LOWERCASE));
 
             if ! matches.is_present("0") {
-                let mtl_num: Vec<char> = each_choose(&NUMBER);
-                mtl.extend_from_slice(&mtl_num);
+                mtl.extend_from_slice(&each_choose(&NUMBER));
             }
 
             if ! matches.is_present("A") {
-                let mtl_upper: Vec<char> = each_choose(&UPPERCASE);
-                mtl.extend_from_slice(&mtl_upper);
+                mtl.extend_from_slice(&each_choose(&UPPERCASE));
             }
 
             if matches.is_present("S") {
-                let mtl_symbol: Vec<char> = each_choose(&SYMBOL);
-                mtl.extend_from_slice(&mtl_symbol);
+                mtl.extend_from_slice(&each_choose(&SYMBOL));
             }
 
             let mtl_rand: Vec<char> = (0..length - n)
