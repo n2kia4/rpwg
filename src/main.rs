@@ -33,7 +33,7 @@ fn main() {
         vec.write(UPPERCASE).unwrap();
         n += 1;
     }
-    if args.symbol == true {
+    if args.symbol == false {
         vec.write(SYMBOL).unwrap();
         n += 1;
     }
@@ -53,7 +53,7 @@ fn main() {
                 mtl.extend_from_slice(&each_choose(&UPPERCASE));
             }
 
-            if args.symbol == true {
+            if args.symbol == false {
                 mtl.extend_from_slice(&each_choose(&SYMBOL));
             }
 
@@ -80,7 +80,7 @@ fn parse_args() -> Args {
         .arg(Arg::from_usage("-q --quantity [quantity] 'Specify the quantity'").default_value("10"))
         .arg(Arg::from_usage("-0 'Don't include numbers'"))
         .arg(Arg::from_usage("-A 'Don't include capital letters'"))
-        .arg(Arg::from_usage("-S 'Include special symbols'"))
+        .arg(Arg::from_usage("-S 'Don't include special symbols'"))
         .get_matches();
 
     Args {
