@@ -14,6 +14,10 @@ const SYMBOL: &'static [u8] = b"!\"#$%&'()-=^~\\|@`[]{};:+*,./_<>?";
 struct Args {
     length: usize,
     quantity: usize,
+    number_c: usize,
+    upper_c: usize,
+    lower_c: usize,
+    symbol_c: usize,
     number: bool,
     upper: bool,
     symbol: bool,
@@ -22,42 +26,43 @@ struct Args {
 fn main() {
     let args = parse_args();
     let mut vec: Vec<u8> = Vec::new();
-    let mut n = 1;
+    let mut count = 0;
 
     vec.write(LOWERCASE).unwrap();
+    count += args.lower_c;
     if args.number == false {
         vec.write(NUMBER).unwrap();
-        n += 1;
+        count += args.number_c;
     }
     if args.upper == false {
         vec.write(UPPERCASE).unwrap();
-        n += 1;
+        count += args.upper_c;
     }
     if args.symbol == false {
         vec.write(SYMBOL).unwrap();
-        n += 1;
+        count += args.symbol_c;
     }
 
     let mut rng = rand::thread_rng();
-    if n <= args.length {
+    if count <= args.length {
         for _ in 0.. args.quantity {
             let mut mtl: Vec<char> = Vec::new();
 
-            mtl.extend_from_slice(&each_choose(&LOWERCASE));
+            mtl.extend_from_slice(&each_choose(args.lower_c, &LOWERCASE));
 
             if args.number == false {
-                mtl.extend_from_slice(&each_choose(&NUMBER));
+                mtl.extend_from_slice(&each_choose(args.number_c, &NUMBER));
             }
 
             if args.upper == false {
-                mtl.extend_from_slice(&each_choose(&UPPERCASE));
+                mtl.extend_from_slice(&each_choose(args.upper_c, &UPPERCASE));
             }
 
             if args.symbol == false {
-                mtl.extend_from_slice(&each_choose(&SYMBOL));
+                mtl.extend_from_slice(&each_choose(args.symbol_c, &SYMBOL));
             }
 
-            let mtl_rand: Vec<char> = (0..args.length - n)
+            let mtl_rand: Vec<char> = (0..args.length - count)
                 .map(|_| *rng.choose(&vec).unwrap() as char)
                 .collect();
             mtl.extend_from_slice(&mtl_rand);
@@ -67,7 +72,7 @@ fn main() {
             println!("{}", pw);
         }
     } else {
-        println!("Please specify length more than {}.", n);
+        println!("Please specify length more than {}.", count);
     }
 }
 
@@ -78,6 +83,10 @@ fn parse_args() -> Args {
         .about("Random password generator")
         .arg(Arg::from_usage("-l --length [length] 'Specify the length'").default_value("8"))
         .arg(Arg::from_usage("-q --quantity [quantity] 'Specify the quantity'").default_value("10"))
+        .arg(Arg::from_usage("-n --number_count [number_count] 'Number count to include'").default_value("1"))
+        .arg(Arg::from_usage("-u --upper_count [upper_count] 'Uppercase count to include'").default_value("1"))
+        .arg(Arg::from_usage("-c --lower_count [lower_count] 'Lowercase count to include'").default_value("1"))
+        .arg(Arg::from_usage("-s --symbol_count [symbol_count] 'Special symbol count to include'").default_value("1"))
         .arg(Arg::from_usage("-0 'Don't include numbers'"))
         .arg(Arg::from_usage("-A 'Don't include capital letters'"))
         .arg(Arg::from_usage("-S 'Don't include special symbols'"))
@@ -86,13 +95,17 @@ fn parse_args() -> Args {
     Args {
         length: value_t!(matches, "length", usize).unwrap(),
         quantity: value_t!(matches, "quantity", usize).unwrap(),
+        number_c: value_t!(matches, "number_count", usize).unwrap(),
+        upper_c: value_t!(matches, "upper_count", usize).unwrap(),
+        lower_c: value_t!(matches, "lower_count", usize).unwrap(),
+        symbol_c: value_t!(matches, "symbol_count", usize).unwrap(),
         number: matches.is_present("0"),
         upper: matches.is_present("A"),
         symbol: matches.is_present("S"),
     }
 }
 
-fn each_choose(x: &[u8]) -> Vec<char> {
+fn each_choose(count: usize, charset: &[u8]) -> Vec<char> {
     let mut rng = rand::thread_rng();
-    (0..1).map(|_| *rng.choose(x).unwrap() as char).collect::<Vec<char>>()
+    (0..count).map(|_| *rng.choose(charset).unwrap() as char).collect::<Vec<char>>()
 }
