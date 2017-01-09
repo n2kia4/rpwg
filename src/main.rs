@@ -25,7 +25,7 @@ struct Args {
 
 fn main() {
     let args = parse_args();
-    let mut vec: Vec<u8> = Vec::new();
+    let mut vec: Vec<_> = Vec::new();
     let mut count = 0;
 
     vec.write(LOWERCASE).unwrap();
@@ -62,10 +62,7 @@ fn main() {
                 mtl.extend_from_slice(&each_choose(args.symbol_c, &SYMBOL));
             }
 
-            let mtl_rand: Vec<char> = (0..args.length - count)
-                .map(|_| *rng.choose(&vec).unwrap() as char)
-                .collect();
-            mtl.extend_from_slice(&mtl_rand);
+            mtl.extend_from_slice(&each_choose(args.length - count, &vec));
 
             rng.shuffle(&mut mtl);
             let pw: String = mtl.into_iter().collect();
