@@ -1,4 +1,6 @@
-# rpwg
+rpwg
+====
+[![Crates.io](https://img.shields.io/crates/v/rpwg.svg)](https://crates.io/crates/rpwg)
 
 Random password generator.
 
