@@ -25,35 +25,11 @@ struct Args {
 
 fn main() {
     let args = parse_args();
-    let mut vec: Vec<_> = Vec::new();
-
-    vec.write(LOWERCASE).unwrap();
-    if args.upper == false {
-        vec.write(UPPERCASE).unwrap();
-    }
-    if args.number == false {
-        vec.write(NUMBER).unwrap();
-    }
-    if args.symbol == false {
-        vec.write(SYMBOL).unwrap();
-    }
-
     let count = args.lower_c + args.upper_c + args.number_c + args.symbol_c;
-    if count <= args.length {
-        let mut rng = rand::thread_rng();
-        for _ in 0.. args.quantity {
-            let mut mtl: Vec<char> = Vec::new();
-            mtl.extend_from_slice(&each_choose(args.lower_c, &LOWERCASE));
-            mtl.extend_from_slice(&each_choose(args.upper_c, &UPPERCASE));
-            mtl.extend_from_slice(&each_choose(args.number_c, &NUMBER));
-            mtl.extend_from_slice(&each_choose(args.symbol_c, &SYMBOL));
-            mtl.extend_from_slice(&each_choose(args.length - count, &vec));
-            rng.shuffle(&mut mtl);
-            let pw: String = mtl.into_iter().collect();
-            println!("{}", pw);
-        }
-    } else {
+    if count > args.length {
         println!("Please specify length more than {}.", count);
+    } else {
+        generate_pw(&args, count);
     }
 }
 
@@ -95,7 +71,37 @@ fn parse_args() -> Args {
     }
 }
 
+fn generate_pw(args: &Args, count: usize) {
+    let mut rng = rand::thread_rng();
+    for _ in 0.. args.quantity {
+        let mut mtl: Vec<char> = Vec::new();
+        mtl.extend_from_slice(&each_choose(args.lower_c, &LOWERCASE));
+        mtl.extend_from_slice(&each_choose(args.upper_c, &UPPERCASE));
+        mtl.extend_from_slice(&each_choose(args.number_c, &NUMBER));
+        mtl.extend_from_slice(&each_choose(args.symbol_c, &SYMBOL));
+        mtl.extend_from_slice(&each_choose(args.length - count, &create_element(args)));
+        rng.shuffle(&mut mtl);
+        let pw: String = mtl.into_iter().collect();
+        println!("{}", pw);
+    }
+}
+
 fn each_choose(count: usize, charset: &[u8]) -> Vec<char> {
     let mut rng = rand::thread_rng();
     (0..count).map(|_| *rng.choose(charset).unwrap() as char).collect::<Vec<char>>()
+}
+
+fn create_element(args: &Args) -> Vec<u8> {
+    let mut vec: Vec<_> = Vec::new();
+    vec.write(LOWERCASE).unwrap();
+    if args.upper == false {
+        vec.write(UPPERCASE).unwrap();
+    }
+    if args.number == false {
+        vec.write(NUMBER).unwrap();
+    }
+    if args.symbol == false {
+        vec.write(SYMBOL).unwrap();
+    }
+    return vec;
 }
