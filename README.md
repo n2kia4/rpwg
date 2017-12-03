@@ -28,17 +28,17 @@ USAGE:
     rpwg [FLAGS] [OPTIONS]
 
 FLAGS:
-    -0               Don't include numbers
-    -A               Don't include capital letters
-    -S               Don't include special symbols
+    -U               Don't include uppercase letters
+    -D               Don't include digits
+    -S               Don't include symbols
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 OPTIONS:
-    -l, --length <length>                Specify the length [default: 8]
-    -q, --quantity <quantity>            Specify the quantity [default: 10]
-    -n, --number_count <number_count>    Number count to include [default: 1]
-    -u, --upper_count <upper_count>      Uppercase count to include [default: 1]
-    -c, --lower_count <lower_count>      Lowercase count to include [default: 1]
-    -s, --symbol_count <symbol_count>    Special symbol count to include [default: 1]
+    -l, --length <length>                Length of the password [default: 8]
+    -n, --num_pw <num_pw>                Number of passwords [default: 10]
+    -c, --lower_count <lower_count>      Minimum number of lowercase letters to include in password [default: 1]
+    -u, --upper_count <upper_count>      Minimum number of uppercase letters to include in password [default: 1]
+    -d, --digits_count <digits_count>    Minimum number of digits to include in password [default: 1]
+    -s, --symbol_count <symbol_count>    Minimum number of symbols to include in password [default: 1]
 ```
