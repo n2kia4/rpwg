@@ -8,24 +8,24 @@ use rand::Rng;
 
 const LOWERCASE: &'static [u8] = b"abcdefghijklmnopqrstuvwxyz";
 const UPPERCASE: &'static [u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const NUMBER: &'static [u8] = b"0123456789";
+const DIGITS: &'static [u8] = b"0123456789";
 const SYMBOL: &'static [u8] = b"!\"#$%&'()-=^~\\|@`[]{};:+*,./_<>?";
 
 struct Args {
+    upper: bool,
+    digits: bool,
+    symbol: bool,
     length: usize,
-    quantity: usize,
+    num_pw: usize,
     lower_c: usize,
     upper_c: usize,
-    number_c: usize,
+    digits_c: usize,
     symbol_c: usize,
-    upper: bool,
-    number: bool,
-    symbol: bool,
 }
 
 fn main() {
     let args = parse_args();
-    let count = args.lower_c + args.upper_c + args.number_c + args.symbol_c;
+    let count = args.lower_c + args.upper_c + args.digits_c + args.symbol_c;
     if count > args.length {
         println!("Please specify length more than {}.", count);
     } else {
@@ -38,31 +38,31 @@ fn parse_args() -> Args {
         .version(crate_version!())
         .author(crate_authors!())
         .about("Random password generator")
-        .arg(Arg::from_usage("-l --length [length] 'Specify the length'").default_value("8"))
-        .arg(Arg::from_usage("-q --quantity [quantity] 'Specify the quantity'").default_value("10"))
-        .arg(Arg::from_usage("-c --lower_count [lower_count] 'Lowercase count to include'").default_value("1"))
-        .arg(Arg::from_usage("-u --upper_count [upper_count] 'Uppercase count to include'").default_value("1"))
-        .arg(Arg::from_usage("-n --number_count [number_count] 'Number count to include'").default_value("1"))
-        .arg(Arg::from_usage("-s --symbol_count [symbol_count] 'Special symbol count to include'").default_value("1"))
-        .arg(Arg::from_usage("-A 'Don't include capital letters'"))
-        .arg(Arg::from_usage("-0 'Don't include numbers'"))
-        .arg(Arg::from_usage("-S 'Don't include special symbols'"))
+        .arg(Arg::from_usage("-U 'Don't include uppercase letters'"))
+        .arg(Arg::from_usage("-D 'Don't include digits'"))
+        .arg(Arg::from_usage("-S 'Don't include symbols'"))
+        .arg(Arg::from_usage("-l --length [length] 'Length of the password'").default_value("8"))
+        .arg(Arg::from_usage("-n --num_pw [num_pw] 'Number of passwords'").default_value("10"))
+        .arg(Arg::from_usage("-c --lower_count [lower_count] 'Minimum number of lowercase letters to include in password'").default_value("1"))
+        .arg(Arg::from_usage("-u --upper_count [upper_count] 'Minimum number of uppercase letters to include in password'").default_value("1"))
+        .arg(Arg::from_usage("-d --digits_count [digits_count] 'Minimum number of digits to include in password'").default_value("1"))
+        .arg(Arg::from_usage("-s --symbol_count [symbol_count] 'Minimum number of symbols to include in password'").default_value("1"))
         .get_matches();
 
     Args {
-        length: value_t!(matches, "length", usize).unwrap(),
-        quantity: value_t!(matches, "quantity", usize).unwrap(),
-        upper: matches.is_present("A"),
-        number: matches.is_present("0"),
+        upper: matches.is_present("U"),
+        digits: matches.is_present("D"),
         symbol: matches.is_present("S"),
+        length: value_t!(matches, "length", usize).unwrap(),
+        num_pw: value_t!(matches, "num_pw", usize).unwrap(),
         lower_c: value_t!(matches, "lower_count", usize).unwrap(),
-        upper_c: match matches.is_present("A") {
+        upper_c: match matches.is_present("U") {
             true => 0,
             false => value_t!(matches, "upper_count", usize).unwrap(),
         },
-        number_c: match matches.is_present("0") {
+        digits_c: match matches.is_present("D") {
             true => 0,
-            false => value_t!(matches, "number_count", usize).unwrap(),
+            false => value_t!(matches, "digits_count", usize).unwrap(),
         },
         symbol_c: match matches.is_present("S") {
             true => 0,
@@ -73,11 +73,11 @@ fn parse_args() -> Args {
 
 fn generate_pw(args: &Args, count: usize) {
     let mut rng = rand::thread_rng();
-    for _ in 0.. args.quantity {
+    for _ in 0.. args.num_pw {
         let mut mtl: Vec<char> = Vec::new();
         mtl.extend_from_slice(&each_choose(args.lower_c, &LOWERCASE));
         mtl.extend_from_slice(&each_choose(args.upper_c, &UPPERCASE));
-        mtl.extend_from_slice(&each_choose(args.number_c, &NUMBER));
+        mtl.extend_from_slice(&each_choose(args.digits_c, &DIGITS));
         mtl.extend_from_slice(&each_choose(args.symbol_c, &SYMBOL));
         mtl.extend_from_slice(&each_choose(args.length - count, &create_element(args)));
         rng.shuffle(&mut mtl);
@@ -97,8 +97,8 @@ fn create_element(args: &Args) -> Vec<u8> {
     if args.upper == false {
         vec.write(UPPERCASE).unwrap();
     }
-    if args.number == false {
-        vec.write(NUMBER).unwrap();
+    if args.digits == false {
+        vec.write(DIGITS).unwrap();
     }
     if args.symbol == false {
         vec.write(SYMBOL).unwrap();
