@@ -3,7 +3,7 @@ extern crate clap;
 extern crate rand;
 
 use std::io::Write;
-use clap::{Arg, App};
+use clap::{App, AppSettings, Arg};
 use rand::Rng;
 
 const LOWERCASE: &'static [u8] = b"abcdefghijklmnopqrstuvwxyz";
@@ -38,6 +38,7 @@ fn parse_args() -> Args {
         .version(crate_version!())
         .author(crate_authors!())
         .about("Random password generator")
+        .setting(AppSettings::DeriveDisplayOrder)
         .arg(Arg::from_usage("-U 'Don't include uppercase letters'"))
         .arg(Arg::from_usage("-D 'Don't include digits'"))
         .arg(Arg::from_usage("-S 'Don't include symbols'"))
